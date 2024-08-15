@@ -1,6 +1,7 @@
 "use client";
 import React, { useContext, useEffect, useState } from "react";
 import Card from "./ui/Card";
+import { SkeletonCard } from "./ui/Skeletons";
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
@@ -22,28 +23,22 @@ const ProductList = () => {
     fetchProducts();
   }, []);
 
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <div className="p-8">
       <h1 className="text-2xl font-bold mb-6">Products</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {products.map(
-          (product: {
-            id: number;
-            title: string;
-            price: number;
-            image: string;
-          }) => (
-            <Card
-              key={product.id}
-              product={product}
-            />
-          )
-        )}
+        {loading
+          ? Array.from({ length: 8 }).map((_, index) => (
+              <SkeletonCard key={index} />
+            ))
+          : products.map(
+              (product: {
+                id: number;
+                title: string;
+                price: number;
+                image: string;
+              }) => <Card key={product.id} product={product} />
+            )}
       </div>
     </div>
   );

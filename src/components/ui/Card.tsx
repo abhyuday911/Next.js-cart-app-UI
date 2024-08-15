@@ -1,8 +1,9 @@
 "use client";
-import { formatPrice } from "@/utils/formatPrice";
 import Image from "next/image";
 import React, { useContext, useState } from "react";
 import { CartContext } from "@/contexts/CartContext";
+import Link from "next/link";
+import { formatPrice } from "@/utils/formatPrice";
 
 interface Product {
   id: number;
@@ -32,12 +33,13 @@ const Card: React.FC<CardProps> = ({ product }) => {
   };
 
   return (
-    <div className="bg-white shadow-md rounded-lg overflow-hidden pt-2">
-      <div className="w-full aspect-square relative">
+    <div className="overflow-hidden pt-2 rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 md:p-6">
+      <div className="w-full aspect-square relative bg-white rounded-md">
         <Image
           src={product.image}
           alt="product image"
           fill={true}
+          priority={false}
           style={{ objectFit: "contain" }}
           sizes="(max-width: 768px) 100vw, 33vw"
         />
@@ -57,9 +59,11 @@ const Card: React.FC<CardProps> = ({ product }) => {
             >
               Remove
             </button>
-            <button className="w-full bg-yellow-500 text-white py-2 rounded-lg hover:bg-yellow-600 transition-colors">
-              View in Cart
-            </button>
+            <Link href="/cart" className="w-full">
+              <button className="w-full bg-yellow-500 text-white py-2 rounded-lg hover:bg-yellow-600 transition-colors">
+                View in Cart
+              </button>
+            </Link>
           </div>
         ) : loading ? (
           <button
