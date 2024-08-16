@@ -19,11 +19,11 @@ interface CardProps {
 const Card: React.FC<CardProps> = ({ product }) => {
   const { cart, addToCart, removeFromCart } = useContext(CartContext)!;
   const [loading, setLoading] = useState(false);
-  const isInCart = cart[product.id] > 0;
+  const isInCart = cart[product.id]?.quantity > 0 || false;
 
   const handleAddToCart = () => {
     setLoading(true);
-    addToCart(product.id).then(() => {
+    addToCart(product.id, product.price).then(() => {
       setLoading(false);
     });
   };

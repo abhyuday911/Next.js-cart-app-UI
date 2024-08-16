@@ -2,13 +2,24 @@
 import Nav from "@/components/Nav";
 import CartItemCard from "@/components/ui/CartItemCard";
 import { CartContext } from "@/contexts/CartContext";
+import { formatPrice } from "@/utils/formatPrice";
 import React, { useContext } from "react";
 
 const page = () => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { cart, removeFromCart } = useContext(CartContext)!;
+  const { cart, removeFromCart, updateQuantity } = useContext(CartContext)!;
+
+  const priceDetails = () => {
+    const price = Object.values(cart).reduce((acc, item) => {
+      return acc + item.price * item.quantity;
+    }, 0);
+    const tax = (price * 18) / 100;
+    const total = price + tax;
+    return { price, tax, total };
+  };
+
   return (
-    <section className="bg-slate-200 py-8 px-2 antialiased dark:bg-gray-900 md:py-16 min-h-screen">
+    <section className="bg-slate-200 text-black dark:text-slate-300 py-8 px-2 antialiased dark:bg-gray-900 md:py-16 min-h-screen">
       <Nav />
       <div className="mx-auto max-w-screen-xl">
         <h2 className="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">
@@ -16,7 +27,7 @@ const page = () => {
         </h2>
 
         <div className="mt-6 sm:mt-8 md:gap-6 lg:flex lg:items-start xl:gap-8">
-          <div className="space-y-6  w-full flex-none lg:max-w-2xl xl:max-w-4xl relative h-[70vh] overflow-auto">
+          <div className="space-y-6  w-full flex-none lg:max-w-2xl xl:max-w-4xl relative lg:h-[70vh] overflow-auto">
             {Object.keys(cart).length === 0 ? (
               <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 md:p-6 flex items-center h-60 justify-center">
                 <div className="text-center text-gray-500 dark:text-gray-400 md:text-xl">
@@ -24,13 +35,17 @@ const page = () => {
                 </div>
               </div>
             ) : (
-              Object.keys(cart).map((id) => (
-                <CartItemCard
-                  key={id}
-                  id={Number(id)}
-                  removeFromCart={removeFromCart}
-                />
-              ))
+              Object.keys(cart)
+                .reverse()
+                .map((id) => (
+                  <CartItemCard
+                    key={id}
+                    quantity={cart[Number(id)].quantity}
+                    id={Number(id)}
+                    removeFromCart={removeFromCart}
+                    updateQuantity={updateQuantity}
+                  />
+                ))
             )}
           </div>
           {Object.keys(cart).length != 0 && (
@@ -47,34 +62,24 @@ const page = () => {
                         Original price
                       </dt>
                       <dd className="text-base font-medium text-gray-900 dark:text-white">
-                        $7,592.00
+                        {formatPrice(priceDetails().price)}
                       </dd>
                     </dl>
 
-                    <dl className="flex items-center justify-between gap-4">
+                    {/* <dl className="flex items-center justify-between gap-4">
                       <dt className="text-base font-normal text-gray-500 dark:text-gray-400">
                         Savings
                       </dt>
                       <dd className="text-base font-medium text-green-600">
                         -$299.00
                       </dd>
-                    </dl>
-
-                    <dl className="flex items-center justify-between gap-4">
-                      <dt className="text-base font-normal text-gray-500 dark:text-gray-400">
-                        Store Pickup
-                      </dt>
-                      <dd className="text-base font-medium text-gray-900 dark:text-white">
-                        $99
-                      </dd>
-                    </dl>
-
+                    </dl> */}
                     <dl className="flex items-center justify-between gap-4">
                       <dt className="text-base font-normal text-gray-500 dark:text-gray-400">
                         Tax
                       </dt>
                       <dd className="text-base font-medium text-gray-900 dark:text-white">
-                        $799
+                        {formatPrice(priceDetails().tax)}
                       </dd>
                     </dl>
                   </div>
@@ -84,14 +89,14 @@ const page = () => {
                       Total
                     </dt>
                     <dd className="text-base font-bold text-gray-900 dark:text-white">
-                      $8,191.00
+                      {formatPrice(priceDetails().total)}
                     </dd>
                   </dl>
                 </div>
 
                 <a
                   href="#"
-                  className="flex w-full items-center justify-center rounded-lg bg-primary-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                  className="flex w-full items-center justify-center rounded-lg bg-blue-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                 >
                   Proceed to Checkout
                 </a>
@@ -102,9 +107,9 @@ const page = () => {
                     or{" "}
                   </span>
                   <a
-                    href="#"
+                    href="/"
                     title=""
-                    className="inline-flex items-center gap-2 text-sm font-medium text-primary-700 underline hover:no-underline dark:text-primary-500"
+                    className="inline-flex items-center gap-2 text-sm font-medium text-blue-700 underline hover:no-underline dark:text-blue-500"
                   >
                     Continue Shopping
                     <svg
@@ -139,14 +144,14 @@ const page = () => {
                     <input
                       type="text"
                       id="voucher"
-                      className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
+                      className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
                       placeholder=""
                       required
                     />
                   </div>
                   <button
                     type="submit"
-                    className="flex w-full items-center justify-center rounded-lg bg-primary-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                    className="flex w-full items-center justify-center rounded-lg bg-blue-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                   >
                     Apply Code
                   </button>

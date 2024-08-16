@@ -1,31 +1,38 @@
 import { formatPrice } from "@/utils/formatPrice";
 import Image from "next/image";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SkeletonCartItemCard } from "./Skeletons";
 
 interface Props {
   id: number;
+  quantity: number;
   removeFromCart: (id: number) => void;
+  updateQuantity: (id: number, quantity: number) => void;
 }
 
-const CartItemCard: React.FC<Props> = ({ id, removeFromCart }) => {
+const CartItemCard: React.FC<Props> = ({
+  id,
+  quantity,
+  removeFromCart,
+  updateQuantity,
+}) => {
   const [products, setProducts] = useState<any>([]);
   const [loading, setLoading] = useState(true);
 
-  async function fetchProducts() {
+  async function fetchProduct() {
     try {
       const res = await fetch(`https://fakestoreapi.com/products/${id}`);
       const data = await res.json();
       setProducts(data);
     } catch (error) {
-      alert("Failed to fetch products: " + error);
+      alert("Failed to fetch product: " + error);
     } finally {
       setLoading(false);
     }
   }
 
   useEffect(() => {
-    fetchProducts();
+    fetchProduct();
   }, []);
 
   if (loading) {
@@ -55,30 +62,45 @@ const CartItemCard: React.FC<Props> = ({ id, removeFromCart }) => {
               id="decrement-button"
               data-input-counter-decrement={`counter-input-${id}`}
               className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-md border border-gray-300 bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700"
+              onClick={() => updateQuantity(id, quantity - 1)}
             >
-              <svg
-                className="h-2.5 w-2.5 text-gray-900 dark:text-white"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 18 2"
-              >
-                <path
-                  stroke="currentColor"
+              {quantity === 1 ? (
+                <svg
+                  className="h-4 w-4 text-gray-900 dark:text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="red"
+                  strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
+                >
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+              ) : (
+                <svg
+                  className="h-4 w-4 text-gray-900 dark:text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
                   strokeWidth="2"
-                  d="M1 1h16"
-                />
-              </svg>
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                </svg>
+              )}
             </button>
+
             <input
               type="text"
               id={`counter-input-${id}`}
               data-input-counter
               className="w-10 shrink-0 border-0 bg-transparent text-center text-sm font-medium text-gray-900 focus:outline-none focus:ring-0 dark:text-white"
               placeholder=""
-              value="2"
+              value={quantity}
               readOnly
               required
             />
@@ -87,6 +109,7 @@ const CartItemCard: React.FC<Props> = ({ id, removeFromCart }) => {
               id="increment-button"
               data-input-counter-increment="counter-input"
               className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-md border border-gray-300 bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700"
+              onClick={() => updateQuantity(id, quantity + 1)}
             >
               <svg
                 className="h-2.5 w-2.5 text-gray-900 dark:text-white"
@@ -107,7 +130,7 @@ const CartItemCard: React.FC<Props> = ({ id, removeFromCart }) => {
           </div>
           <div className="text-end md:order-4 md:w-32">
             <p className="text-base font-bold text-gray-900 dark:text-white">
-              {formatPrice(products.price)}
+              {formatPrice(products.price * quantity)}
             </p>
           </div>
         </div>
