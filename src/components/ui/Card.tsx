@@ -51,7 +51,7 @@ const Card: React.FC<CardProps> = ({ product }) => {
         </h2>
         <div
           role="tooltip"
-          className="absolute z-10 top-full hidden group-hover:inline-block px-2 py-1 text-xs font-medium text-white bg-gray-800 bg-opacity-80 rounded-lg shadow-sm w-full dark:bg-gray-700"
+          className="absolute z-10 top-full hidden group-hover:inline-block px-2 py-1 text-xs font-medium text-white bg-gray-800 bg-opacity-80 rounded-lg shadow-sm max-w-full dark:bg-gray-700"
         >
           {product.title}
         </div>
