@@ -44,7 +44,7 @@ const Card: React.FC<CardProps> = ({ product }) => {
           sizes="(max-width: 768px) 100vw, 33vw"
         />
       </div>
-      <div className="p-4">
+      <div className="p-4 md:p-0 lg:pt-4">
         <h2 className="text-lg font-semibold mb-2 truncate w-5/6">
           {product.title}
         </h2>
