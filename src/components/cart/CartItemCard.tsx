@@ -1,7 +1,7 @@
 import { formatPrice } from "@/utils/formatPrice";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
-import { SkeletonCartItemCard } from "./Skeletons";
+import { SkeletonCartItemCard } from "../ui/Skeletons";
 
 interface Props {
   id: number;
@@ -19,21 +19,21 @@ const CartItemCard: React.FC<Props> = ({
   const [products, setProducts] = useState<any>([]);
   const [loading, setLoading] = useState(true);
 
-  async function fetchProduct() {
-    try {
-      const res = await fetch(`https://fakestoreapi.com/products/${id}`);
-      const data = await res.json();
-      setProducts(data);
-    } catch (error) {
-      alert("Failed to fetch product: " + error);
-    } finally {
-      setLoading(false);
-    }
-  }
-
   useEffect(() => {
+    async function fetchProduct() {
+      try {
+        const res = await fetch(`https://fakestoreapi.com/products/${id}`);
+        const data = await res.json();
+        setProducts(data);
+      } catch (error) {
+        alert("Failed to fetch product: " + error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
     fetchProduct();
-  }, []);
+  }, [id]);
 
   if (loading) {
     return <SkeletonCartItemCard />;
