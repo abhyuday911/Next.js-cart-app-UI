@@ -9,12 +9,12 @@ const Nav = () => {
   const { cart } = useContext(CartContext)!;
   const [theme, toggleTheme] = useTheme();
   return (
-    <div className="fixed top-0 right-0 z-10 px-4 py-2 font-medium text-sm gilroy bg-zinc-800 lg:rounded-bl-md w-full lg:w-[50vw]">
-      <div className="flex items-center  h-full gap-8 text-zinc-300 pl-4">
+    <div className="fixed top-0 right-0 z-10 px-4 py-3 font-medium text-md gilroy bg-zinc-950 w-full">
+      <div className="flex items-center  h-full gap-8 text-zinc-300 px-2 lg:px-8">
         <Link href="/" className="hover:scale-105">
           Home
         </Link>
-        <Link href="/cart" className="hover:scale-105">
+        <Link href="/cart" className="hover:scale-105 ml-auto">
           <div className="relative py-2">
             {Object.keys(cart).length > 0 && (
               <div className="-top-1 absolute left-3">
@@ -42,7 +42,7 @@ const Nav = () => {
         </Link>
         <button
           onClick={() => toggleTheme()}
-          className="p-2 rounded-md text-gray-300 bg-zinc-900 bg-transparent dark:bg-gray-700 focus:outline-none ml-auto"
+          className="p-2 rounded-md text-gray-300 bg-zinc-900 bg-transparent dark:bg-gray-700 focus:outline-none "
         >
           {theme === "dark" ? (
             <svg

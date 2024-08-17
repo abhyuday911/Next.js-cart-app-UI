@@ -9,9 +9,9 @@ const Cart = () => {
   const { cart, removeFromCart, updateQuantity } = useContext(CartContext)!;
 
   return (
-    <section className="bg-slate-200 text-black dark:text-slate-300 p-2  pt-20 lg:pt-10 py-8 px-2 antialiased dark:bg-gray-900 min-h-screen">
+    <section className="bg-slate-200 text-black dark:text-slate-300 p-2  pt-20 py-8 px-2 antialiased dark:bg-gray-900 min-h-screen">
       <Nav />
-      <div className="mx-auto max-w-screen-xl">
+      <div className="mx-auto max-w-screen-xl pt-4 md:pt-8">
         <h2 className="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">
           Shopping Cart
         </h2>
