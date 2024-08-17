@@ -44,10 +44,18 @@ const Card: React.FC<CardProps> = ({ product }) => {
           sizes="(max-width: 768px) 100vw, 33vw"
         />
       </div>
-      <div className="p-4 md:p-0 lg:pt-4">
+      <div className="p-4 md:p-0 lg:pt-4 ">
+        <div className="group relative">
         <h2 className="text-lg font-semibold mb-2 truncate w-5/6">
           {product.title}
         </h2>
+        <div
+          role="tooltip"
+          className="absolute z-10 top-full hidden group-hover:inline-block px-2 py-1 text-xs font-medium text-white bg-gray-800 bg-opacity-80 rounded-lg shadow-sm w-full dark:bg-gray-700"
+        >
+          {product.title}
+        </div>
+        </div>
         <p className="text-gray-700 text-xl font-bold mb-4">
           {formatPrice(product.price)}
         </p>
